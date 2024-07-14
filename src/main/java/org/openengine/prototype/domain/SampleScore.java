@@ -1,117 +1,120 @@
 package org.openengine.prototype.domain;
 
 public class SampleScore {
+    public class TeamInfo {
+        private double homeStrength;
+        private double awayStrength;
 
-    private double homeStrength;
-    private double awayStrength;
-
-    private int homeScore;
-    private int awayScore;
-
-    private boolean neutral;
-
-    private double distance;
-
-    public SampleScore(double homeStrength, double awayStrength, int homeScore, int awayScore, boolean neutral) {
-        this.homeStrength = homeStrength;
-        this.awayStrength = awayStrength;
-        this.homeScore = homeScore;
-        this.awayScore = awayScore;
-        this.neutral = neutral;
-    }
-
-    public String toString() {
-        return "Home strength: " + this.homeStrength + ", " +
-                "Away strength: " + this.awayStrength + ", " +
-                "Home score: " + this.homeScore + ", " +
-                "Away score: " + this.awayScore + ", " + "Neutral: " + this.neutral;
-    }
-
-    public double getHomeStrength() {
-        return homeStrength;
-    }
-
-    public double getAwayStrength() {
-        return awayStrength;
-    }
-
-    public int getHomeScore() {
-        return homeScore;
-    }
-
-    public int getAwayScore() {
-        return awayScore;
-    }
-
-    public boolean isNeutral() {
-        return neutral;
-    }
-
-    public double getDistance() {
-        return this.distance;
-    }
-
-    private double squaredDistance(double a, double f) {
-        return Math.pow(a - f, 2);
-    }
-
-    private double hypotenuse(double sqrX, double sqrY) {
-        return Math.sqrt(sqrX + sqrY);
-    }
-
-    public void calculateDistance(double homeStrength, double awayStrength, boolean neutral) {
-
-        double homeSquaredDistance = squaredDistance(homeStrength, this.homeStrength);
-        double awaySquaredDistance = squaredDistance(awayStrength, this.awayStrength);
-
-        double totalDistance = hypotenuse(homeSquaredDistance, awaySquaredDistance);
-
-        if (neutral) {
-            totalDistance = calculateNeutralDistance(homeStrength, awayStrength, totalDistance);
+        public TeamInfo(double homeStrength, double awayStrength) {
+            this.homeStrength = homeStrength;
+            this.awayStrength = awayStrength;
         }
 
-        this.distance = totalDistance;
+        public double getHomeStrength() { return homeStrength; }
+        public double getAwayStrength() { return awayStrength; }
     }
 
-    public void calculateHomeDistance(double homeStrength, boolean neutral) {
-        calculateSingleDistance(homeStrength, neutral, true);
+    public class ScoreInfo {
+        private int homeScore;
+        private int awayScore;
+        private boolean neutral;
+
+        public ScoreInfo(int homeScore, int awayScore, boolean neutral) {
+            this.homeScore = homeScore;
+            this.awayScore = awayScore;
+            this.neutral = neutral;
+        }
+
+        public int getHomeScore() { return homeScore; }
+        public int getAwayScore() { return awayScore; }
+        public boolean isNeutral() { return neutral; }
     }
 
-    public void calculateAwayDistance(double awayStrength, boolean neutral) {
-        calculateSingleDistance(awayStrength, neutral, false);
-    }
+    public class GameParameters {
+        private TeamInfo teamInfo;
+        private ScoreInfo scoreInfo;
+        private double distance;
 
-    public void calculateClosest(double strength, boolean filterOnHome) {
-        calculateSingleDistance(strength, true, filterOnHome);
-    }
+        public GameParameters(TeamInfo teamInfo, ScoreInfo scoreInfo) {
+            this.teamInfo = teamInfo;
+            this.scoreInfo = scoreInfo;
+        }
 
-    public void calculateSingleDistance(double strength, boolean neutral, boolean filterOnHome) {
+        public TeamInfo getTeamInfo() { return teamInfo; }
+        public ScoreInfo getScoreInfo() { return scoreInfo; }
+        public double getDistance() { return this.distance; }
 
-        double distance = squaredDistance(strength, filterOnHome ? this.homeStrength : this.awayStrength);
+        public String toString() {
+            return "Home strength: " + this.teamInfo.getHomeStrength() + ", " +
+                    "Away strength: " + this.teamInfo.getAwayStrength() + ", " +
+                    "Home score: " + this.scoreInfo.getHomeScore() + ", " +
+                    "Away score: " + this.scoreInfo.getAwayScore() + ", " +
+                    "Neutral: " + this.scoreInfo.isNeutral();
+        }
 
-        if (neutral) {
+        private double squaredDistance(double a, double f) {
+            return Math.pow(a - f, 2);
+        }
 
-            double reverseDistance = squaredDistance(strength, filterOnHome ? this.awayStrength : this.homeStrength);
+        private double hypotenuse(double sqrX, double sqrY) {
+            return Math.sqrt(sqrX + sqrY);
+        }
 
-            if (reverseDistance < distance) {
-                distance = reverseDistance;
+        public void calculateDistance(double homeStrength, double awayStrength, boolean neutral) {
+
+            double homeSquaredDistance = squaredDistance(homeStrength, this.teamInfo.getHomeStrength());
+            double awaySquaredDistance = squaredDistance(awayStrength, this.teamInfo.getAwayStrength());
+
+            double totalDistance = hypotenuse(homeSquaredDistance, awaySquaredDistance);
+
+            if (neutral) {
+                totalDistance = calculateNeutralDistance(homeStrength, awayStrength, totalDistance);
             }
+
+            this.distance = totalDistance;
         }
 
-        this.distance = distance;
-    }
-
-    private double calculateNeutralDistance(double homeStrength, double awayStrength, double totalDistance) {
-
-        double homeToAwayDistance = squaredDistance(homeStrength, this.awayStrength);
-        double awayToHomeDistance = squaredDistance(awayStrength, this.homeStrength);
-
-        double reverseDistance = squaredDistance(homeToAwayDistance, awayToHomeDistance);
-
-        if (reverseDistance < totalDistance) {
-            totalDistance = reverseDistance;
+        public void calculateHomeDistance(double homeStrength, boolean neutral) {
+            calculateSingleDistance(homeStrength, neutral, true);
         }
 
-        return totalDistance;
+        public void calculateAwayDistance(double awayStrength, boolean neutral) {
+            calculateSingleDistance(awayStrength, neutral, false);
+        }
+
+        public void calculateClosest(double strength, boolean filterOnHome) {
+            calculateSingleDistance(strength, true, filterOnHome);
+        }
+
+        public void calculateSingleDistance(double strength, boolean neutral, boolean filterOnHome) {
+
+            double distance = squaredDistance(strength, filterOnHome ? this.teamInfo.getHomeStrength() : this.teamInfo.getAwayStrength());
+
+            if (neutral) {
+
+                double reverseDistance = squaredDistance(strength, filterOnHome ? this.teamInfo.getAwayStrength() : this.teamInfo.getHomeStrength());
+
+                if (reverseDistance < distance) {
+                    distance = reverseDistance;
+                }
+            }
+
+            this.distance = distance;
+        }
+
+        private double calculateNeutralDistance(double homeStrength, double awayStrength, double totalDistance) {
+
+            double homeToAwayDistance = squaredDistance(homeStrength, this.teamInfo.getAwayStrength());
+            double awayToHomeDistance = squaredDistance(awayStrength, this.teamInfo.getHomeStrength());
+
+            double reverseDistance = squaredDistance(homeToAwayDistance, awayToHomeDistance);
+
+            if (reverseDistance < totalDistance) {
+                totalDistance = reverseDistance;
+            }
+
+            return totalDistance;
+        }
+
     }
 }

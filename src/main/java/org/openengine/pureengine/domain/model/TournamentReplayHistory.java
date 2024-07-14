@@ -16,7 +16,6 @@ public class TournamentReplayHistory {
         this.finalsParticipationsNum = finalsParticipationsNum;
         this.historialCoefficient = historialCoefficient;
     }
-
     public int getTournamentId() {
         return tournamentId;
     }
