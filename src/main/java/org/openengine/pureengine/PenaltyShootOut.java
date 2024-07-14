@@ -27,27 +27,37 @@ public class PenaltyShootOut {
     }
 
     public void execute(boolean silentMode) {
-        for (int i = 0; i < PENALTIES_NUM; i++) {
-            if (!isTeamInShootOut(this.homeTeam)) break;
-            if (!silentMode) displayPenalty(this.homeTeam);
-            shootPenalty(this.homeTeam, silentMode);
-            this.homeTeamPenaltiesTaken++;
-            if (!isTeamInShootOut(this.homeTeam)) break;
-
-            if (!isTeamInShootOut(this.awayTeam)) break;
-            if (!silentMode) displayPenalty(this.awayTeam);
-            shootPenalty(this.awayTeam, silentMode);
-            this.awayTeamPenaltiesTaken++;
-            if (!isTeamInShootOut(this.awayTeam)) break;
-        }
-        while (homeGoalsScored == awayGoalsScored) {
-            executePenaltyShotRound(silentMode);
-        }
+        executePenalties(silentMode);
+        executePenaltyShotRoundUntilDifferentScore(silentMode);
         if (!silentMode) {
             System.out.println("Final score:");
             displayScore();
         }
     }
+    private void executePenalties(boolean silentMode) {
+        executeTeamPenalties(this.homeTeam, silentMode);
+        executeTeamPenalties(this.awayTeam, silentMode);
+    }
+    private void executeTeamPenalties(Team team, boolean silentMode) {
+        int penaltiesTaken = 0;
+        while (isTeamInShootOut(team)) {
+            if (!silentMode) displayPenalty(team);
+            shootPenalty(team, silentMode);
+            penaltiesTaken++;
+            if (!isTeamInShootOut(team)) break;
+        }
+        if (team == this.homeTeam) {
+            this.homeTeamPenaltiesTaken = penaltiesTaken;
+        } else {
+            this.awayTeamPenaltiesTaken = penaltiesTaken;
+        }
+    }
+    private void executePenaltyShotRoundUntilDifferentScore(boolean silentMode) {
+        while (homeGoalsScored == awayGoalsScored) {
+            executePenaltyShotRound(silentMode);
+        }
+    }
+
 
     private void executePenaltyShotRound(boolean silentMode) {
         if (!silentMode) displayPenalty(this.homeTeam);
