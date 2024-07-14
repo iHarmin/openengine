@@ -43,12 +43,12 @@ public class SQLiteConfig {
     @Bean
     public TournamentRepositoryDbImpl tournamentRepositoryDbImpl(
             JdbcTemplate jdbcTemplate,
-            CompetitionRepositoryDbImpl competitionRepository,
-            TournamentParticipationRepositoryDbImpl tournamentParticipationRepository,
-            TeamRepositoryDbImpl teamRepository) {
+            CompetitionRepositoryDbImpl compRepo,
+            TournamentParticipationRepositoryDbImpl tourPartRepo,
+            TeamRepositoryDbImpl teamRepo) {
 
         return new TournamentRepositoryDbImpl(jdbcTemplate,
-                competitionRepository, tournamentParticipationRepository, teamRepository);
+                compRepo, tourPartRepo, teamRepo);
     }
 
     @Bean
