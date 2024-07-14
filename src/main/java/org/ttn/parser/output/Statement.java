@@ -12,7 +12,6 @@ import static java.util.Objects.nonNull;
 import static org.ttn.parser.output.MatchDataElement.StatementType.STANDARD;
 
 public class Statement implements MatchDataElement {
-    
     private int time;
     private PitchPosition pitchPosition;
     private ActionContext actionContext;
@@ -45,109 +44,25 @@ public class Statement implements MatchDataElement {
         this(time, pitchPosition, new Action(actionType), actionOutcome, STANDARD);
     }
 
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public PitchPosition getPitchPosition() {
-        return pitchPosition;
-    }
-
-    public void setPitchPosition(PitchPosition pitchPosition) {
-        this.pitchPosition = pitchPosition;
-    }
-
-    @Deprecated
-    public TacticalPosition.X getTacticalPositionX() {
-        return tacticalPositionX;
-    }
-
-    public void setTacticalPositionX(TacticalPosition.X tacticalPositionX) {
-        this.tacticalPositionX = tacticalPositionX;
-    }
-
-    @Deprecated
-    public TacticalPosition.Y getTacticalPositionY() {
-        return tacticalPositionY;
-    }
-
-    public void setTacticalPositionY(TacticalPosition.Y tacticalPositionY) {
-        this.tacticalPositionY = tacticalPositionY;
-    }
-
-    public void setActionOutcome(ActionOutcome actionOutcome) {
-        this.actionOutcome = actionOutcome;
-    }
-
-    public void setActionContext(ActionContext actionContext) {
-        this.actionContext = actionContext;
-    }
-
-    public ActionContext getActionContext() {
-        return this.actionContext;
-    }
-
-    public ActionOutcome getActionOutcome() {
-        return this.actionOutcome;
-    }
-
-    public ActionOutcome getRestingOutcome() {
-        return restingOutcome;
-    }
-
-    public void setRestingOutcome(ActionOutcome restingOutcome) {
-        this.restingOutcome = restingOutcome;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
-    public String getTeam() {
-        return team;
-    }
-
-    public void setTeam(String team) {
-        this.team = team;
-    }
-
-    public SetPiece getSetPiece() {
-        return setPiece;
-    }
-
-    public void setSetPiece(SetPiece setPiece) {
-        this.setPiece = setPiece;
-    }
-
-    public void setBallPossessionChange(boolean ballPossessionChange) {
-        this.ballPossessionChange = true;
-    }
-
-    @Deprecated
-    public boolean isBallPossessionChange() {
-        return this.ballPossessionChange;
-    }
+    public int getTime() { return time; }
+    public void setTime(int time) { this.time = time; }
+    public PitchPosition getPitchPosition() { return pitchPosition; }
+    public ActionContext getActionContext() { return this.actionContext; }
+    public void setActionContext(ActionContext actionContext) { this.actionContext = actionContext; }
+    public ActionOutcome getActionOutcome() { return this.actionOutcome; }
+    public ActionOutcome getRestingOutcome() { return restingOutcome; }
+    public void setRestingOutcome(ActionOutcome restingOutcome) { this.restingOutcome = restingOutcome; }
+    public Action getAction() { return action; }
+    public void setAction(Action action) { this.action = action; }
+    public String getTeam() { return team; }
+    public void setTeam(String team) { this.team = team; }
+    public StatementType getType() { return type; }
+    public void setType(StatementType type) { this.type = type; }
 
     public boolean isPossessionChange() {
         if (nonNull(restingOutcome)) {
             return restingOutcome.isPossessionChange();
         }
         return actionOutcome.isPossessionChange();
-    }
-
-    public StatementType getType() {
-        return type;
-    }
-
-    public void setType(StatementType type) {
-        this.type = type;
     }
 }

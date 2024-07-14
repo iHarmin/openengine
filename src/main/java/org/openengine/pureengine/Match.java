@@ -49,7 +49,6 @@ public class Match {
                         this.awayTeam, this.goalsScored.get(this.awayTeam));
     }
 
-
     public List<MatchEvent> getEvents() {
         return List.copyOf(events);
     }
@@ -65,34 +64,19 @@ public class Match {
 
     public Team getWinningTeam() {
         if (this.goalsScored.get(this.homeTeam) > this.goalsScored.get(this.awayTeam)) {
-            this.winningTeam = this.homeTeam;
+            return this.homeTeam;
         } else if (this.goalsScored.get(this.awayTeam) > this.goalsScored.get(this.homeTeam)) {
-            this.winningTeam = this.awayTeam;
+            return this.awayTeam;
         } else if (!this.goalsScoredPenaltyShootOut.isEmpty()) {
-            if (this.goalsScoredPenaltyShootOut.get(this.homeTeam) > this.goalsScoredPenaltyShootOut.get(this.awayTeam)) {
-                this.winningTeam = this.homeTeam;
-            } else if (this.goalsScoredPenaltyShootOut.get(this.homeTeam) < this.goalsScoredPenaltyShootOut.get(this.awayTeam)) {
-                this.winningTeam = this.awayTeam;
-            }
+            return this.goalsScoredPenaltyShootOut.get(this.homeTeam) > this.goalsScoredPenaltyShootOut.get(this.awayTeam)
+                    ? this.homeTeam : this.awayTeam;
         }
-
-        return winningTeam;
+        return null;
     }
 
     public Team getLosingTeam() {
-        if (this.goalsScored.get(this.homeTeam) < this.goalsScored.get(this.awayTeam)) {
-            this.losingTeam = this.homeTeam;
-        } else if (this.goalsScored.get(this.awayTeam) < this.goalsScored.get(this.homeTeam)) {
-            this.losingTeam = this.awayTeam;
-        } else if (!this.goalsScoredPenaltyShootOut.isEmpty()) {
-            if (this.goalsScoredPenaltyShootOut.get(this.homeTeam) > this.goalsScoredPenaltyShootOut.get(this.awayTeam)) {
-                this.losingTeam = this.awayTeam;
-            } else if (this.goalsScoredPenaltyShootOut.get(this.homeTeam) < this.goalsScoredPenaltyShootOut.get(this.awayTeam)) {
-                this.losingTeam = this.homeTeam;
-            }
-        }
-
-        return losingTeam;
+        Team winningTeam = getWinningTeam();
+        return winningTeam.equals(this.homeTeam) ? this.awayTeam : this.homeTeam;
     }
 
     public Team getHomeTeam() {
